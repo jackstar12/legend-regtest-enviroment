@@ -55,9 +55,11 @@ services:
     depends_on:
       - bitcoind
     image: boltz/c-lightning:22.11.1
-    entrypoint: "sh -c 'sleep 15 && lightningd --large-channels --network regtest --bind-addr=0.0.0.0:9735 --bitcoin-rpcconnect=bitcoind --bitcoin-rpcport=18443 --bitcoin-rpcuser=lnbits --bitcoin-rpcpassword=lnbits'"
+    entrypoint: "sh -c 'sleep 15 && lightningd --large-channels --network regtest --bind-addr=0.0.0.0:9735 --bitcoin-rpcconnect=bitcoind --bitcoin-rpcport=18443 --bitcoin-rpcuser=lnbits --bitcoin-rpcpassword=lnbits --grpc-port 9736'"
     expose:
       - 9735
+    ports:
+      - 9736:9736
     volumes:
       - ./data/clightning-1:/root/.lightning/
 
