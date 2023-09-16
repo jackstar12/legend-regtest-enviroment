@@ -5,6 +5,10 @@ bitcoin-cli-sim() {
   docker exec lnbits-legend-bitcoind-1 bitcoin-cli -rpcuser=lnbits -rpcpassword=lnbits -regtest "$@"
 }
 
+elements-cli-sim() {
+  docker exec lnbits-legend-elementsd-1 elements-cli "$@"
+}
+
 # args(i, cmd)
 lightning-cli-sim() {
   i=$1
@@ -96,8 +100,17 @@ lnbits-bitcoin-init(){
   bitcoin-cli-sim -generate 150 > /dev/null
 }
 
+
+lnbits-liquid-init(){
+  echo "init liquid wallet..."
+  elements-cli-sim createwallet lnbits || elements-cli-sim loadwallet lnbits
+  echo "mining 150 blocks..."
+  elements-cli-sim -generate 150 > /dev/null
+}
+
 lnbits-regtest-init(){
   lnbits-bitcoin-init
+  lnbits-liquid-init
   lnbits-lightning-sync
   lnbits-lightning-init
 }
